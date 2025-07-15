@@ -201,6 +201,7 @@ export class UsersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.products = this.products.filter(product => product.id !== id);
+        this.updatePagination();
         Swal.fire(
           '¡Eliminado!',
           'El producto ha sido eliminado.',
@@ -255,8 +256,10 @@ export class UsersComponent implements OnInit {
       }
     }).then((result) => {
       if (result.isConfirmed) {
+        // Encuentra el id máximo actual y suma 1 para evitar duplicados
+        const maxId = this.products.length > 0 ? Math.max(...this.products.map(p => p.id)) : 0;
         const newProduct: EditableProduct = {
-          id: this.products.length + 1,
+          id: maxId + 1,
           title: result.value.title,
           price: parseFloat(result.value.price),
           stock: parseInt(result.value.stock),
@@ -267,11 +270,12 @@ export class UsersComponent implements OnInit {
           brand: 'Generic',
           thumbnail: 'https://via.placeholder.com/150',
           images: ['https://via.placeholder.com/150'],
-          isEditing: false
+          isEditing: false,
+          isVisible: true
         };
-        
         this.products.unshift(newProduct);
-        Swal.fire('¡Agregado!', 'El producto ha sido agregado.', 'success');
+        this.currentPage = 1; // Opcional: mostrar el producto en la primera página
+        this.updatePagination();
         Swal.fire('¡Agregado!', 'El producto ha sido agregado.', 'success');
       }
     });
