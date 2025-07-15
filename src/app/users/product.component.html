@@ -1,0 +1,106 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <div class="container-fluid">
+    <!-- Logo -->
+    <a class="navbar-brand">Abarrotes La Soledad</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-between" id="mynavbar">
+      <!-- Buscador centrado -->
+      <div class="mx-auto" style="width: 40%; min-width: 300px;">
+        <form class="d-flex justify-content-center">
+          <input class="form-control me-2" 
+                 type="search" 
+                 [(ngModel)]="searchTerm" 
+                 (ngModelChange)="searchProducts()" 
+                 name="search"
+                 placeholder="Buscar productos...">
+          <button class="btn btn-primary" type="button">
+            <i class="fas fa-search"></i>
+          </button>
+        </form>
+      </div>
+      <!-- Perfil de usuario alineado a la derecha -->
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <div class="user-profile d-flex align-items-center" (click)="showUserProfile()">
+            <img [src]="userProfile?.avatar || defaultAvatar" 
+                 alt="profile" 
+                 class="profile-image"
+                 onerror="this.onerror=null; this.src='${defaultAvatar}'">
+            <span class="user-name text-light ms-2">{{ userProfile?.name || 'Usuario' }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="users-container">
+  <h1>Catálogo de Productos</h1>
+  <div class="actions-header">
+    <button (click)="addProduct()" class="add-btn">
+      <i class="fas fa-plus"></i> Agregar Producto
+    </button>
+  </div>
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Imagen</th>
+        <th>Título</th>
+        <th>Precio</th>
+        <th>Categoría</th>
+        <th>Stock</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of paginatedProducts">
+        <td>{{product.id}}</td>
+        <td><img [src]="product.thumbnail" alt="product" width="50"></td>
+        <td>
+          <span *ngIf="!product.isEditing">{{product.title}}</span>
+          <input *ngIf="product.isEditing" [(ngModel)]="product.title" type="text">
+        </td>
+        <td>
+          <span *ngIf="!product.isEditing">${{product.price}}</span>
+          <input *ngIf="product.isEditing" [(ngModel)]="product.price" type="number">
+        </td>
+        <td>{{product.category}}</td>
+        <td>
+          <span *ngIf="!product.isEditing">{{product.stock}}</span>
+          <input *ngIf="product.isEditing" [(ngModel)]="product.stock" type="number">
+        </td>
+        <td>
+          <button *ngIf="!product.isEditing" (click)="editProduct(product)" class="edit-btn">
+            <i class="fas fa-edit"></i> Editar
+          </button>
+          <button *ngIf="product.isEditing" (click)="saveProduct(product)" class="save-btn">
+            <i class="fas fa-save"></i> Guardar
+          </button>
+          <button (click)="viewDetails(product)" class="view-btn">
+            <i class="fas fa-eye"></i> Ver más
+          </button>
+          <button (click)="deleteProduct(product.id)" class="delete-btn">
+            <i class="fas fa-trash"></i> Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container mt-3">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <a class="page-link" href="javascript:void(0)" (click)="goToPage(currentPage - 1)">Anterior</a>
+    </li>
+    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" 
+        [class.active]="currentPage === (i + 1)">
+      <a class="page-link" href="javascript:void(0)" (click)="goToPage(i + 1)">{{i + 1}}</a>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <a class="page-link" href="javascript:void(0)" (click)="goToPage(currentPage + 1)">Siguiente</a>
+    </li>
+  </ul>
+</div>
