@@ -1,8 +1,94 @@
 # ProyectoAPI por Marcos Gabriel Cuevas Estevez y Roman Santiago Galeote Carrera 
 
-## Tecnologias usadas: Visual Estudio Code, Github, Angular 
+## Tecnologias usadas
+- Angular 20
+- TypeScript
+- RxJS
+- HTML / CSS
+- SweetAlert2 (alertas)
+- Bootstrap
+- API REST externas
+- Angular Router
+- Visual Studio Code
 
+## 🧩 Explicación del código y flujo de la app
 
+La aplicación Angular implementa un flujo completo de autenticación, consumo de productos y operaciones CRUD. A continuación, se detallan los módulos y métodos clave:
+
+### 🔐 Login y autenticación (`login.component.ts`, `auth.service.ts`)
+
+- `login(email, password)`  
+  Envía las credenciales a la API de EscuelaJS, obtiene un `access_token` y lo guarda en `localStorage`.
+
+- `getUserProfile(email)`  
+  Después del login, obtiene los datos del usuario autenticado (nombre, avatar, rol).
+
+- `isAuthenticated()`  
+  Verifica si existe un token válido en el almacenamiento local.
+
+- `logout()`  
+  Elimina el token y redirige al login.
+
+### ✅ Protección de rutas (`auth.guard.ts`)
+
+Impide el acceso a rutas privadas si no hay un token válido.
+
+## 📦 Funcionalidades principales de productos
+
+Basadas en la API de productos de [dummyjson.com](https://dummyjson.com):
+
+### 🔍 Buscador de productos
+
+- Permite buscar productos por nombre desde un input.
+- Filtra los resultados localmente o con parámetros de la API.
+
+### 📜 Paginación
+
+- Controla la visualización de productos por página.
+- Implementado con botones que actualizan los datos visibles mediante `slicing` o parámetros `skip` y `limit`.
+
+### 🧾 Métodos de manejo de productos (`product.service.ts`)
+
+- `getAllProducts()`  
+  Obtiene todos los productos de la API.
+
+- `searchProducts(query)`  
+  Busca productos que coincidan con el texto ingresado.
+
+- `getProductById(id)`  
+  Obtiene información de un producto específico.
+
+- `createProduct(product)`  
+  Envía un `POST` a la API para agregar un nuevo producto.
+
+- `updateProduct(id, product)`  
+  Envía un `PUT` o `PATCH` para actualizar un producto existente.
+
+- `deleteProduct(id)`  
+  Elimina un producto enviando un `DELETE`.
+
+## 🧍‍♂️ Tarjeta de usuario
+
+Después del login, se muestra la información del usuario autenticado:
+
+- Nombre
+- Correo electrónico
+- Avatar
+- Rol
+
+Esto se consigue con el método `getUserProfile()` del `AuthService` después de validar el token recibido.
+
+## 🌐 APIs utilizadas y justificación
+
+### ✅ [https://dummyjson.com/products](https://dummyjson.com/products)
+
+- **Función:** Mostrar, buscar, agregar, actualizar y eliminar productos.
+- **Justificación:** Ideal para simular un sistema de inventario sin necesidad de backend propio.
+
+### ✅ [https://api.escuelajs.co/api/v1/users](https://api.escuelajs.co/api/v1/users)
+
+- **Función:** Login de usuarios, recuperación de perfil e imagen.
+- **Justificación:** Simula un sistema real de autenticación con JWT y endpoints protegidos.
 
 # Pruebas 
 ## Logeo (credeciales del api de escuelajs)
